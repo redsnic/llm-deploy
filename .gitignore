@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.trial/
+# Keep schemas tracked even when embedded in a parent repo ignoring *.json.
+!src/llm_deploy/*.json

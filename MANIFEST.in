@@ -1,0 +1,5 @@
+include LICENSE README.md
+recursive-include scripts *.py *.sh
+recursive-include tests *.py
+recursive-include examples *.yaml
+recursive-include src/llm_deploy *.json *.yaml

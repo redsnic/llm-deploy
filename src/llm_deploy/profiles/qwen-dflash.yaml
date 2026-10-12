@@ -1,0 +1,21 @@
+schema_version: 1
+name: qwen-dflash
+engine: vllm
+model:
+  repo: Qwen/Qwen3.8-27B
+  revision: 1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0
+runtime:
+  dtype: bfloat16
+  context: 262144
+  parallel: 8
+  tensor_parallel: 1
+  gpu_memory_utilization: 0.90
+  language_model_only: true
+speculative:
+  method: dflash
+  repo: incoai/Qwen3.8-27B-DFlash2
+  revision: dedf8df68adfb1afeaf7b7480c0a0243108177b4
+  num_speculative_tokens: 7
+parsers:
+  reasoning: qwen3
+  tool_calls: qwen3_coder

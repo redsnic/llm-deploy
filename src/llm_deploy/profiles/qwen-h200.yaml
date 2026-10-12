@@ -1,0 +1,17 @@
+schema_version: 1
+name: qwen-h200
+engine: vllm
+model:
+  repo: Qwen/Qwen3.8-27B
+  revision: 1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0
+runtime:
+  dtype: bfloat16
+  context: 32768
+  parallel: 1
+  tensor_parallel: 1
+  gpu_memory_utilization: 0.90
+  language_model_only: true
+parsers:
+  reasoning: qwen3
+  tool_calls: qwen3_coder
+# Target-only alternative to the DFlash2 profile. Requires compatible vLLM.

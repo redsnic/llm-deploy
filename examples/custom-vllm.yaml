@@ -1,0 +1,12 @@
+# Replace repo and commit with a real, engine-compatible safetensors model.
+schema_version: 1
+name: my-model
+engine: vllm
+model:
+  repo: OWNER/MODEL
+  revision: REPLACE_WITH_40_CHARACTER_COMMIT
+runtime:
+  dtype: float16
+  context: 4096
+  parallel: 1
+# No speculation, reasoning parser, or tool parser enabled.

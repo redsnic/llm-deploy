@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-deploy"
+version = "0.2.0"
+description = "Apptainer LLM deployment locally or in a single Slurm job"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dependencies = ["PyYAML>=6,<7", "jsonschema>=4.18,<5", "huggingface-hub>=0.27,<2"]
+
+[project.scripts]
+llm-deploy = "llm_deploy.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+llm_deploy = ["profiles/*.yaml", "*.json"]

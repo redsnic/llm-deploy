@@ -1,0 +1,204 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$"
+    },
+    "engine": {
+      "enum": [
+        "llama-cpp",
+        "vllm"
+      ]
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "repo": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{40}$"
+        },
+        "file": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*\\.gguf$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
+      },
+      "required": [
+        "repo",
+        "revision"
+      ]
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "type": "integer",
+          "minimum": 128
+        },
+        "parallel": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "gpu_layers": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "batch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ubatch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "flash_attention": {
+          "type": "boolean"
+        },
+        "cache_type": {
+          "enum": [
+            "f16",
+            "q8_0",
+            "q4_0"
+          ]
+        },
+        "dtype": {
+          "enum": [
+            "auto",
+            "float16",
+            "bfloat16",
+            "float32"
+          ]
+        },
+        "tensor_parallel": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "gpu_memory_utilization": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "language_model_only": {
+          "type": "boolean"
+        }
+      },
+      "required": []
+    },
+    "speculative": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "const": "dflash"
+        },
+        "repo": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{40}$"
+        },
+        "num_speculative_tokens": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "method",
+        "repo",
+        "revision",
+        "num_speculative_tokens"
+      ]
+    },
+    "parsers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reasoning": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tool_calls": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": []
+    },
+    "container": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "image"
+      ],
+      "properties": {
+        "image": {
+          "type": "string",
+          "pattern": "^docker://[A-Za-z0-9._:/-]+@sha256:[a-f0-9]{64}$"
+        }
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "name",
+    "engine",
+    "model"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "engine": {
+            "const": "llama-cpp"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "model": {
+            "required": [
+              "file",
+              "bytes",
+              "sha256"
+            ]
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "speculative"
+              ]
+            },
+            {
+              "required": [
+                "parsers"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
